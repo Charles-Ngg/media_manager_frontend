@@ -1,8 +1,13 @@
+/* src/App.css */
+/* Remove existing styles or adjust them to work with styled-components */
+
 .App {
     text-align: center;
-    background-color: #f5f5f7;
+    /* background-color and color are managed by GlobalStyle */
     min-height: 100vh;
 }
+
+/* Remove or adjust animations if necessary */
 
 .App-logo {
     height: 40vmin;
@@ -16,19 +21,11 @@
 }
 
 .App-header {
-    background-color: #ffffff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    font-size: calc(10px + 2vmin);
-    color: #1c1c1e;
-    padding: 40px;
+    /* Styles are now managed by styled-components */
 }
 
 .App-link {
-    color: #007aff;
+    /* Color is now handled by styled-components themes */
 }
 
 @keyframes App-logo-spin {

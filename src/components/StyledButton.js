@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 const StyledButton = styled.button`
-    background-color: #007aff;
+    background-color: ${({ theme }) => theme.buttonBackground};
     color: white;
     padding: 12px 20px;
     border: none;
@@ -12,12 +12,12 @@ const StyledButton = styled.button`
     transition: background-color 0.3s ease, transform 0.2s ease;
 
     &:hover {
-        background-color: #0051a8;
+        background-color: ${({ theme }) => theme.buttonHoverBackground};
         transform: translateY(-2px);
     }
 
     &:active {
-        background-color: #003f7f;
+        background-color: ${({ theme }) => theme.buttonActiveBackground};
         transform: translateY(0);
     }
 `;

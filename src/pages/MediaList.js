@@ -10,6 +10,8 @@ const Container = styled.div`
     padding: 40px;
     max-width: 1200px;
     margin: 0 auto;
+    background-color: ${({ theme }) => theme.bodyBackground};
+    transition: background-color 0.3s ease;
 `;
 
 const Header = styled.div`
@@ -28,11 +30,11 @@ const MediaGrid = styled.ul`
 `;
 
 const MediaCard = styled.li`
-    background-color: #ffffff;
+    background-color: ${({ theme }) => theme.cardBackground};
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
 
     &:hover {
         transform: translateY(-5px);
@@ -42,7 +44,7 @@ const MediaCard = styled.li`
 
 const MediaTitle = styled.h3`
     margin-top: 0;
-    color: #1c1c1e;
+    color: ${({ theme }) => theme.textColor};
 `;
 
 function MediaList() {

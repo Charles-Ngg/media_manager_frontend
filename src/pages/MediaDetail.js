@@ -19,16 +19,21 @@ const Container = styled.div`
     max-width: 800px;
     margin: 0 auto;
     animation: ${fadeIn} 0.5s ease-in-out;
+    background-color: ${({ theme }) => theme.cardBackground};
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 `;
 
 const Section = styled.div`
     margin-bottom: 30px;
+    color: ${({ theme }) => theme.textColor};
 `;
 
 const LikeButton = styled(StyledButton)`
-    background-color: #ff2d55;
+    background-color: ${({ theme }) => theme.likeButtonBackground};
     &:hover {
-        background-color: #e02145;
+        background-color: ${({ theme }) => theme.likeButtonHoverBackground};
     }
 `;
 

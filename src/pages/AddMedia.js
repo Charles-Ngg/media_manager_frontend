@@ -9,9 +9,10 @@ const Container = styled.div`
     padding: 40px;
     max-width: 600px;
     margin: 0 auto;
-    background-color: #ffffff;
+    background-color: ${({ theme }) => theme.cardBackground};
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 `;
 
 const FormGroup = styled.div`
@@ -21,20 +22,25 @@ const FormGroup = styled.div`
 const Label = styled.label`
     display: block;
     margin-bottom: 8px;
-    color: #1c1c1e;
+    color: ${({ theme }) => theme.textColor};
     font-weight: bold;
 `;
 
 const Input = styled.input`
     width: 100%;
     padding: 12px;
-    border: 1px solid #d1d1d6;
+    background-color: ${({ theme }) => theme.inputBackground};
+    border: 1px solid ${({ theme }) => theme.inputBorder};
     border-radius: 8px;
     font-size: 16px;
+    color: ${({ theme }) => theme.textColor};
+
     &:focus {
-        border-color: #007aff;
+        border-color: ${({ theme }) => theme.inputFocusBorder};
         outline: none;
     }
+
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 `;
 
 function AddMedia() {

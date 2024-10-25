@@ -1,0 +1,31 @@
+export const lightTheme = {
+    bodyBackground: '#f5f5f7',
+    textColor: '#1c1c1e',
+    linkColor: '#007aff',
+    buttonBackground: '#007aff',
+    buttonHoverBackground: '#0051a8',
+    buttonActiveBackground: '#003f7f',
+    navbarBackground: '#ffffff',
+    cardBackground: '#ffffff',
+    inputBackground: '#ffffff',
+    inputBorder: '#d1d1d6',
+    inputFocusBorder: '#007aff',
+    likeButtonBackground: '#ff2d55',
+    likeButtonHoverBackground: '#e02145',
+};
+
+export const darkTheme = {
+    bodyBackground: '#1c1c1e',
+    textColor: '#f5f5f7',
+    linkColor: '#0a84ff',
+    buttonBackground: '#0a84ff',
+    buttonHoverBackground: '#0066cc',
+    buttonActiveBackground: '#004499',
+    navbarBackground: '#2c2c2e',
+    cardBackground: '#2c2c2e',
+    inputBackground: '#3a3a3c',
+    inputBorder: '#5a5a5f',
+    inputFocusBorder: '#0a84ff',
+    likeButtonBackground: '#ff375f',
+    likeButtonHoverBackground: '#e02145',
+};
