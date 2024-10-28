@@ -1,70 +1,204 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# **Media Management System (Frontend) with React**
 
-## Available Scripts
+This project is the **Frontend** of the Media Management System, built using **React.js**. The frontend provides an interactive user interface for managing a large and diverse collection of media files. Users can view media lists, access detailed media and actor pages, perform searches, and interact with media items by rating, tagging, and liking them.
+
+---
+
+## **Table of Contents**
+
+- [**Media Management System (Frontend) with React**](#media-management-system-frontend-with-react)
+  - [**Table of Contents**](#table-of-contents)
+  - [**Project Features**](#project-features)
+  - [**Tech Stack**](#tech-stack)
+  - [**Development Environment Setup**](#development-environment-setup)
+  - [**Project Structure**](#project-structure)
+  - [**Running the Project**](#running-the-project)
+  - [**Environment Variables**](#environment-variables)
+  - [**API Integration**](#api-integration)
+  - [**Available Scripts**](#available-scripts)
+  - [**Future Enhancements**](#future-enhancements)
+  - [**Conclusion**](#conclusion)
+  - [**License**](#license)
+  - [**Contributors**](#contributors)
+
+---
+
+## **Project Features**
+
+- **Media List and Search:**  
+  - Browse through a list of media items with search functionality.
+  
+- **Detailed Media and Actor Pages:**  
+  - View detailed information about media and associated actors.
+  
+- **User Interactions:**  
+  - Rate, tag, and like media items and actors.
+
+- **Add New Media:**  
+  - Submit new media entries through the interface.
+
+- **Navigation and Routing:**  
+  - Seamless navigation using React Router.
+
+---
+
+## **Tech Stack**
+
+- **Frontend Framework:** React.js  
+- **Routing:** React Router  
+- **HTTP Client:** Axios  
+- **UI Library (Optional):** Material-UI, Ant Design, or Bootstrap  
+- **Package Management:** npm or Yarn  
+
+---
+
+## **Development Environment Setup**
+
+1. **Clone the repository:**
+
+    ```bash
+    git clone <your-frontend-repository-url>
+    cd frontend
+    ```
+
+2. **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3. **Configure API Endpoint:**
+
+    Create a `.env` file in the root directory:
+
+    ```bash
+    REACT_APP_API_URL=http://192.168.1.100:8000/api  # Replace with your backend IP
+    ```
+
+---
+
+## **Project Structure**
+
+```
+frontend/
+├── public/         # Public assets and index.html
+├── src/
+│   ├── components/ # Reusable React components
+│   ├── pages/      # Page-level components
+│   ├── services/   # API service functions
+│   ├── styles/     # CSS and styling files (optional)
+│   ├── App.js      # Main application component
+│   ├── index.js    # Application entry point
+├── .env            # Environment variables
+├── package.json    # Project dependencies and scripts
+└── README.md       # Project documentation
+```
+
+---
+
+## **Running the Project**
+
+1. **Start the React development server:**
+
+    ```bash
+    npm start
+    ```
+
+2. **Access the application:**
+
+    Open your browser and navigate to:
+
+    ```
+    http://localhost:3000
+    ```
+
+3. **Testing on another device:**
+
+    If the backend is accessible externally, replace `localhost` with the IP address of your development machine:
+
+    ```
+    http://192.168.1.100:3000
+    ```
+
+---
+
+## **Environment Variables**
+
+Use environment variables to store API endpoints and other configuration values.
+
+Create a `.env` file in the project root:
+
+```bash
+REACT_APP_API_URL=http://192.168.1.100:8000/api  # Backend API URL
+```
+
+---
+
+## **API Integration**
+
+This project interacts with the backend using Axios. All API calls are defined in `src/services/api.js`.
+
+**Example API Call:**
+
+```javascript
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
+export const getMediaList = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/media/`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching media list:', error);
+    throw error;
+  }
+};
+```
+
+---
+
+## **Available Scripts**
 
 In the project directory, you can run:
 
-### `npm start`
+- **`npm start`**:  
+  Runs the app in development mode at `http://localhost:3000`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **`npm build`**:  
+  Builds the app for production.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **`npm test`**:  
+  Launches the test runner in interactive mode.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## **Future Enhancements**
 
-### `npm run build`
+- **Authentication:** Implement user login and registration.  
+- **Pagination and Filtering:** Add pagination to the media list for better performance.  
+- **File Uploads:** Enable media file uploads via the interface.  
+- **Advanced Search:** Provide more filtering options for media items.  
+- **Deployment:** Prepare for deployment using Docker or a cloud provider.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## **Conclusion**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This frontend provides a user-friendly interface for managing media files. It integrates seamlessly with the backend API to offer features like browsing, searching, and interacting with media items. 
 
-### `npm run eject`
+If you encounter any issues or need further assistance, feel free to reach out!
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## **License**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+This project is licensed under the MIT License.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## **Contributors**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Your Name**: Frontend Developer & Maintainer  
+- **OpenAI**: Assistant for project planning and guidance  
