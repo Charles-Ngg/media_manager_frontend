@@ -1,116 +1,103 @@
 // src/pages/ActorDetail.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getActorDetail, submitInteraction } from '../services/api';
+import { getActorById } from '../services/api';
+import { useParams, Link } from 'react-router-dom';
+import '../styles/ActorDetail.css'; // Ensure you have corresponding CSS
 
 function ActorDetail() {
-  const { id } = useParams();
+  const { id } = useParams(); // Extract the actor ID from the URL
   const [actor, setActor] = useState(null);
-  const [rating, setRating] = useState('');
-  const [tag, setTag] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchActorDetail();
-  }, []);
+  }, [id]);
 
   const fetchActorDetail = async () => {
     try {
-      const response = await getActorDetail(id);
+      const response = await getActorById(id);
       setActor(response.data);
-    } catch (error) {
-      console.error('Error fetching actor detail:', error);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching actor details:', err);
+      setError('Failed to fetch actor details.');
+      setLoading(false);
     }
   };
 
-  const handleRatingSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const interactionData = {
-        user_id: 'user123',
-        target_id: id,
-        target_type: 'actor',
-        interaction_type: 'rating',
-        value: rating,
-      };
-      await submitInteraction(interactionData);
-      fetchActorDetail();
-      setRating('');
-    } catch (error) {
-      console.error('Error submitting rating:', error);
-    }
-  };
-
-  const handleTagSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const interactionData = {
-        user_id: 'user123',
-        target_id: id,
-        target_type: 'actor',
-        interaction_type: 'tag',
-        value: tag,
-      };
-      await submitInteraction(interactionData);
-      fetchActorDetail();
-      setTag('');
-    } catch (error) {
-      console.error('Error submitting tag:', error);
-    }
-  };
-
-  async function handleLike() {
-    try {
-      const interactionData = {
-        user_id: 'user123',
-        target_id: id,
-        target_type: 'actor',
-        interaction_type: 'like',
-        value: '1',
-      };
-      await submitInteraction(interactionData);
-      fetchActorDetail();
-    } catch (error) {
-      console.error('Error liking actor:', error);
-    }
-  }
-
-  if (!actor) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading actor details...</div>;
+  if (error) return <div>{error}</div>;
+  if (!actor) return <div>No actor found.</div>;
 
   return (
-    <div>
+    <div className="actor-detail">
       <h2>{actor.name}</h2>
-      <p>Tags: {actor.tags.join(', ')}</p>
-      <p>Rating: {actor.ratings}</p>
-      <p>Likes: {actor.likes}</p>
+      <img src={actor.profile_image_url} alt={actor.name} className="actor-profile-image" />
+      
+      <div className="actor-info">
+        <p><strong>Aliases:</strong> {actor.alias.length > 0 ? actor.alias.join(', ') : 'N/A'}</p>
+        <p><strong>Date of Birth:</strong> {new Date(actor.date_of_birth).toLocaleDateString()}</p>
+        <p><strong>Nationality:</strong> {actor.nationality}</p>
+        <p><strong>Biography:</strong> {actor.biography}</p>
 
-      <h3>Rate this actor:</h3>
-      <form onSubmit={handleRatingSubmit}>
-        <input
-          type="number"
-          step="0.1"
-          max="5"
-          min="0"
-          value={rating}
-          onChange={(e) => setRating(e.target.value)}
-          required
-        />
-        <button type="submit">Submit Rating</button>
-      </form>
+        {actor.body_measurements && (
+          <div className="body-measurements">
+            <h3>Body Measurements</h3>
+            <p><strong>Height:</strong> {actor.body_measurements.height_cm} cm</p>
+            <p><strong>Weight:</strong> {actor.body_measurements.weight_kg} kg</p>
+            <p><strong>Bust:</strong> {actor.body_measurements.bust_cm} cm</p>
+            <p><strong>Waist:</strong> {actor.body_measurements.waist_cm} cm</p>
+            <p><strong>Hips:</strong> {actor.body_measurements.hips_cm} cm</p>
+            <p><strong>Bra Cup:</strong> {actor.body_measurements.bra_cup}</p>
+          </div>
+        )}
 
-      <h3>Add a tag:</h3>
-      <form onSubmit={handleTagSubmit}>
-        <input
-          type="text"
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-          required
-        />
-        <button type="submit">Add Tag</button>
-      </form>
+        {actor.awards && actor.awards.length > 0 && (
+          <div className="awards">
+            <h3>Awards</h3>
+            <ul>
+              {actor.awards.map((award, index) => (
+                <li key={index}>{award}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-      <button onClick={handleLike}>Like</button>
+        {actor.social_media && (
+          <div className="social-media">
+            <h3>Social Media</h3>
+            {actor.social_media.instagram && (
+              <p>
+                <a href={actor.social_media.instagram} target="_blank" rel="noopener noreferrer">
+                  Instagram
+                </a>
+              </p>
+            )}
+            {actor.social_media.twitter && (
+              <p>
+                <a href={actor.social_media.twitter} target="_blank" rel="noopener noreferrer">
+                  Twitter
+                </a>
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Optionally, display filmography if available */}
+      {actor.filmography && actor.filmography.length > 0 && (
+        <div className="filmography">
+          <h3>Filmography</h3>
+          <ul>
+            {actor.filmography.map((mediaId) => (
+              <li key={mediaId}>
+                <Link to={`/media/${mediaId}`}>Media ID: {mediaId}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

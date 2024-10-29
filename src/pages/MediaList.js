@@ -1,5 +1,6 @@
 // src/pages/MediaList.js
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { getMediaList } from '../services/api';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
@@ -49,7 +50,8 @@ const MediaTitle = styled.h3`
 
 function MediaList() {
     const [mediaList, setMediaList] = useState([]);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [query, setQuery] = useState('');
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
     useEffect(() => {
         fetchMedia();
@@ -64,18 +66,30 @@ function MediaList() {
         }
     };
 
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.get(`${API_URL}/media/search/`, {
+                params: { q: query },
+            });
+            setMediaList(response.data);
+        } catch (error) {
+            console.error('Error searching media:', error);
+        }
+    };
+
     // Filter media based on search query
     const filteredMediaList = mediaList.filter((media) => {
-        const query = searchQuery.toLowerCase();
+        const searchTerm = query.toLowerCase();
         return (
-            (media.title && media.title.toLowerCase().includes(query)) ||
+            (media.title && media.title.toLowerCase().includes(searchTerm)) ||
             (media.categories &&
                 media.categories.some(
-                    (cat) => cat && cat.toLowerCase().includes(query)
+                    (cat) => cat && cat.toLowerCase().includes(searchTerm)
                 )) ||
             (media.tags &&
                 media.tags.some(
-                    (tag) => tag && tag.toLowerCase().includes(query)
+                    (tag) => tag && tag.toLowerCase().includes(searchTerm)
                 ))
         );
     });
@@ -88,13 +102,14 @@ function MediaList() {
                     Add New Media
                 </StyledButton>
             </Header>
-            <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            <SearchBar query={query} setQuery={setQuery} handleSearch={handleSearch} />
             <MediaGrid>
                 {filteredMediaList.map((media) => (
                     <MediaCard key={media.id}>
                         <MediaTitle>{media.title}</MediaTitle>
-                        <p>Categories: {media.categories.join(', ')}</p>
-                        <p>Tags: {media.tags.join(', ')}</p>
+                        <img src={media.poster_image_url} alt={media.title} className="media-poster" />
+                        <p>Type: {media.type}</p>
+                        <p>Release Date: {media.release_date}</p>
                         <StyledButton as={Link} to={`/media/${media.id}`}>
                             View Details
                         </StyledButton>

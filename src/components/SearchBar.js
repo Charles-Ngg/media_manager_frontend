@@ -1,20 +1,17 @@
 // src/components/SearchBar.js
 import React from 'react';
 
-function SearchBar({ searchQuery, setSearchQuery }) {
-  const handleChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
+function SearchBar({ query, setQuery, handleSearch }) {
   return (
-    <div>
+    <form onSubmit={handleSearch}>
       <input
         type="text"
         placeholder="Search media..."
-        value={searchQuery}
-        onChange={handleChange}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
       />
-    </div>
+      <button type="submit">Search</button>
+    </form>
   );
 }
 
