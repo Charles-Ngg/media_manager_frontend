@@ -5,53 +5,24 @@ import { getMediaList } from '../services/api';
 import { Link } from 'react-router-dom';
 import SearchBar from '../components/SearchBar';
 import StyledButton from '../components/StyledButton';
-import styled from 'styled-components';
-
-const Container = styled.div`
-    padding: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: ${({ theme }) => theme.bodyBackground};
-    transition: background-color 0.3s ease;
-`;
-
-const Header = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-`;
-
-const MediaGrid = styled.ul`
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 0;
-`;
-
-const MediaCard = styled.li`
-    background-color: ${({ theme }) => theme.cardBackground};
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-
-    &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-    }
-`;
-
-const MediaTitle = styled.h3`
-    margin-top: 0;
-    color: ${({ theme }) => theme.textColor};
-`;
+import {
+    MediaListContainer,
+    MediaListHeader,
+    HeaderTitle,
+    AddMediaButton,
+    MediaGrid,
+    MediaCard,
+    MediaTitle,
+    MediaPoster,
+    MediaType,
+    MediaReleaseDate,
+    ViewDetailsButton,
+} from '../styles/MediaList.styles';
 
 function MediaList() {
     const [mediaList, setMediaList] = useState([]);
     const [query, setQuery] = useState('');
-    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+    const API_URL = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         fetchMedia();
@@ -95,28 +66,33 @@ function MediaList() {
     });
 
     return (
-        <Container>
-            <Header>
-                <h2>Media List</h2>
-                <StyledButton as={Link} to="/add-media">
+        <MediaListContainer>
+            <MediaListHeader>
+                <HeaderTitle>Media List</HeaderTitle>
+                <AddMediaButton as={Link} to="/add-media">
                     Add New Media
-                </StyledButton>
-            </Header>
+                </AddMediaButton>
+            </MediaListHeader>
             <SearchBar query={query} setQuery={setQuery} handleSearch={handleSearch} />
             <MediaGrid>
                 {filteredMediaList.map((media) => (
                     <MediaCard key={media.id}>
                         <MediaTitle>{media.title}</MediaTitle>
-                        <img src={media.poster_image_url} alt={media.title} className="media-poster" />
-                        <p>Type: {media.type}</p>
-                        <p>Release Date: {media.release_date}</p>
-                        <StyledButton as={Link} to={`/media/${media.id}`}>
+                        {media.poster_image_url && (
+                            <MediaPoster
+                                src={media.poster_image_url}
+                                alt={media.title}
+                            />
+                        )}
+                        <MediaType>Type: {media.type}</MediaType>
+                        <MediaReleaseDate>Release Date: {media.release_date}</MediaReleaseDate>
+                        <ViewDetailsButton as={Link} to={`/media/${media.id}`}>
                             View Details
-                        </StyledButton>
+                        </ViewDetailsButton>
                     </MediaCard>
                 ))}
             </MediaGrid>
-        </Container>
+        </MediaListContainer>
     );
 }
 

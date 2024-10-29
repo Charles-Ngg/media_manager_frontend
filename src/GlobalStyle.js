@@ -20,6 +20,7 @@ const GlobalStyle = createGlobalStyle`
 
     a:hover {
         text-decoration: underline;
+        color: ${({ theme }) => theme.linkHoverColor};
     }
 
     h2, h3 {
@@ -29,6 +30,8 @@ const GlobalStyle = createGlobalStyle`
     button {
         font-family: inherit;
     }
+
+    /* Add more global styles as needed */
 `;
 
 export default GlobalStyle;

@@ -1,37 +1,23 @@
 // src/App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
-import { BrowserRouter } from 'react-router-dom'; // Added import
 import { lightTheme, darkTheme } from './themes';
-import Navbar from './components/Navbar';
-import AppRoutes from './Routes';
 import GlobalStyle from './GlobalStyle';
+import AppRoutes from './Routes';
+import Navbar from './components/Navbar';
 
 function App() {
-    const [theme, setTheme] = useState('light');
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setTheme(savedTheme);
-        }
-    }, []);
+    const [currentTheme, setCurrentTheme] = useState('light');
 
     const toggleTheme = () => {
-        setTheme((prevTheme) => {
-            const newTheme = prevTheme === 'light' ? 'dark' : 'light';
-            localStorage.setItem('theme', newTheme);
-            return newTheme;
-        });
+        setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light');
     };
 
     return (
-        <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-            <BrowserRouter> {/* Added BrowserRouter */}
-                <GlobalStyle />
-                <Navbar toggleTheme={toggleTheme} currentTheme={theme} />
-                <AppRoutes />
-            </BrowserRouter> {/* Closed BrowserRouter */}
+        <ThemeProvider theme={currentTheme === 'light' ? lightTheme : darkTheme}>
+            <GlobalStyle />
+            <Navbar toggleTheme={toggleTheme} currentTheme={currentTheme} />
+            <AppRoutes />
         </ThemeProvider>
     );
 }
