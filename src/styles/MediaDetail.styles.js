@@ -39,7 +39,7 @@ export const Info = styled.div`
     }
 `;
 
-export const Section = styled.div`
+export const Section = styled.section`
     margin-top: 30px;
 
     h3 {
@@ -52,20 +52,20 @@ export const Section = styled.div`
         list-style-type: disc;
         margin-left: 20px;
         color: ${({ theme }) => theme.textColor};
-    }
 
-    p {
-        margin-left: 20px;
-        color: ${({ theme }) => theme.textColor};
-    }
+        li {
+            margin-bottom: 8px;
+        }
 
-    a {
-        color: ${({ theme }) => theme.linkColor};
-        text-decoration: none;
-        transition: color 0.2s ease;
+        a {
+            color: ${({ theme }) => theme.linkColor};
+            text-decoration: none;
+            transition: color 0.2s ease;
 
-        &:hover {
-            color: ${({ theme }) => theme.linkHoverColor};
+            &:hover {
+                color: ${({ theme }) => theme.linkHoverColor};
+                text-decoration: underline;
+            }
         }
     }
 
@@ -97,4 +97,15 @@ export const Loading = styled.div`
     font-size: 1.5em;
     color: ${({ theme }) => theme.textColor};
     margin-top: 50px;
+`;
+
+export const SourceLink = styled.a`
+    color: ${({ theme }) => theme.linkColor};
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: ${({ theme }) => theme.linkHoverColor};
+        text-decoration: underline;
+    }
 `; 

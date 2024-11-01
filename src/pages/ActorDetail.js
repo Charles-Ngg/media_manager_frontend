@@ -11,6 +11,7 @@ import {
     Loading,
     ErrorMessage,
     NoActor,
+    ProfileGallery,
 } from '../styles/ActorDetail.styles';
 
 function ActorDetail() {
@@ -42,18 +43,23 @@ function ActorDetail() {
     return (
         <Container>
             <Name>{actor.name}</Name>
-            {actor.profile_image_url && (
-                <ProfileImage
-                    src={actor.profile_image_url}
-                    alt={actor.name}
-                />
+            {actor.profile_image_urls && actor.profile_image_urls.length > 0 && (
+                <ProfileGallery>
+                    {actor.profile_image_urls.map((url, index) => (
+                        <ProfileImage
+                            key={index}
+                            src={url}
+                            alt={`${actor.name} Profile ${index + 1}`}
+                        />
+                    ))}
+                </ProfileGallery>
             )}
 
             <Info>
                 <p><strong>Aliases:</strong> {actor.alias.length > 0 ? actor.alias.join(', ') : 'N/A'}</p>
-                <p><strong>Date of Birth:</strong> {new Date(actor.date_of_birth).toLocaleDateString()}</p>
-                <p><strong>Nationality:</strong> {actor.nationality}</p>
-                <p><strong>Biography:</strong> {actor.biography}</p>
+                <p><strong>Date of Birth:</strong> {actor.date_of_birth ? new Date(actor.date_of_birth).toLocaleDateString() : 'N/A'}</p>
+                <p><strong>Nationality:</strong> {actor.nationality || 'N/A'}</p>
+                <p><strong>Biography:</strong> {actor.biography || 'No biography available.'}</p>
             </Info>
 
             {actor.body_measurements && (
@@ -64,7 +70,7 @@ function ActorDetail() {
                     <p><strong>Bust:</strong> {actor.body_measurements.bust_cm} cm</p>
                     <p><strong>Waist:</strong> {actor.body_measurements.waist_cm} cm</p>
                     <p><strong>Hips:</strong> {actor.body_measurements.hips_cm} cm</p>
-                    <p><strong>Bra Cup:</strong> {actor.body_measurements.bra_cup}</p>
+                    <p><strong>Bra Cup:</strong> {actor.body_measurements.bra_cup || 'N/A'}</p>
                 </Section>
             )}
 

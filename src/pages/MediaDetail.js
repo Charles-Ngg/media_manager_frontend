@@ -1,7 +1,8 @@
 // src/pages/MediaDetail.js
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getMediaById, getGenreById, getTagById } from '../services/api';
+import { getMediaById, getGenreById, getTagById, getActorById } from '../services/api';
+import styled from 'styled-components';
 import {
     Container,
     Title,
@@ -11,11 +12,25 @@ import {
     Loading,
 } from '../styles/MediaDetail.styles';
 
+// **Define SourceLink here if not exporting from styles**
+const SourceLink = styled.a`
+    color: ${({ theme }) => theme.linkColor};
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+        color: ${({ theme }) => theme.linkHoverColor};
+        text-decoration: underline;
+    }
+`;
+
 function MediaDetail() {
     const { id } = useParams();
     const [media, setMedia] = useState(null);
     const [genres, setGenres] = useState([]);
     const [tags, setTags] = useState([]);
+    const [cast, setCast] = useState([]);
+    const [directors, setDirectors] = useState([]);
 
     useEffect(() => {
         fetchMediaDetail();
@@ -41,6 +56,22 @@ function MediaDetail() {
                 const tagResponses = await Promise.all(tagPromises);
                 const tagNames = tagResponses.map((res) => res.data.name);
                 setTags(tagNames);
+            }
+
+            // Fetch cast actors if cast_ids exists
+            if (mediaData.cast_ids && mediaData.cast_ids.length > 0) {
+                const castPromises = mediaData.cast_ids.map((actorId) => getActorById(actorId));
+                const castResponses = await Promise.all(castPromises);
+                const castData = castResponses.map((res) => res.data);
+                setCast(castData);
+            }
+
+            // Fetch directors if director_ids exists
+            if (mediaData.director_ids && mediaData.director_ids.length > 0) {
+                const directorPromises = mediaData.director_ids.map((directorId) => getActorById(directorId));
+                const directorResponses = await Promise.all(directorPromises);
+                const directorData = directorResponses.map((res) => res.data);
+                setDirectors(directorData);
             }
         } catch (error) {
             console.error('Error fetching media detail:', error);
@@ -80,11 +111,11 @@ function MediaDetail() {
                 </Section>
             )}
 
-            {media.cast && media.cast.length > 0 && (
+            {cast.length > 0 && (
                 <Section className="media-cast">
                     <h3>Cast:</h3>
                     <ul>
-                        {media.cast.map((actor) => (
+                        {cast.map((actor) => (
                             <li key={actor.id}>
                                 <Link to={`/actors/${actor.id}`} className="actor-link">
                                     {actor.name}
@@ -95,13 +126,13 @@ function MediaDetail() {
                 </Section>
             )}
 
-            {media.directors && media.directors.length > 0 && (
+            {directors.length > 0 && (
                 <Section className="media-directors">
                     <h3>Directors:</h3>
                     <ul>
-                        {media.directors.map((director) => (
+                        {directors.map((director) => (
                             <li key={director.id}>
-                                <Link to={`/director/${director.id}`} className="director-link">
+                                <Link to={`/directors/${director.id}`} className="director-link">
                                     {director.name}
                                 </Link>
                             </li>
@@ -141,6 +172,25 @@ function MediaDetail() {
                 <Section className="media-trailer">
                     <h3>Trailer:</h3>
                     <video src={media.trailer_url} controls className="trailer-video" />
+                </Section>
+            )}
+
+            {media.information_source_urls && media.information_source_urls.length > 0 && (
+                <Section className="media-sources">
+                    <h3>Information Sources:</h3>
+                    <ul>
+                        {media.information_source_urls.map((url, index) => (
+                            <li key={index}>
+                                <SourceLink 
+                                    href={url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                >
+                                    Source {index + 1}
+                                </SourceLink>
+                            </li>
+                        ))}
+                    </ul>
                 </Section>
             )}
         </Container>

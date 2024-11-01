@@ -31,6 +31,29 @@ export const ProfileImage = styled.img`
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 `;
 
+export const ProfileGallery = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    img {
+        width: calc(33% - 10px);
+        border-radius: 8px;
+        object-fit: cover;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        @media (max-width: 768px) {
+            width: calc(50% - 10px);
+        }
+
+        @media (max-width: 480px) {
+            width: 100%;
+        }
+    }
+`;
+
 export const Info = styled.div`
     p {
         font-size: 1.1em;
@@ -39,7 +62,7 @@ export const Info = styled.div`
     }
 `;
 
-export const Section = styled.div`
+export const Section = styled.section`
     margin-top: 30px;
 
     h3 {
@@ -52,32 +75,21 @@ export const Section = styled.div`
         list-style-type: disc;
         margin-left: 20px;
         color: ${({ theme }) => theme.textColor};
-    }
 
-    a {
-        color: ${({ theme }) => theme.linkColor};
-        text-decoration: none;
-        transition: color 0.2s ease;
-
-        &:hover {
-            color: ${({ theme }) => theme.linkHoverColor};
+        li {
+            margin-bottom: 8px;
         }
-    }
 
-    img {
-        width: calc(33% - 10px);
-        border-radius: 8px;
-        object-fit: cover;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+        a {
+            color: ${({ theme }) => theme.linkColor};
+            text-decoration: none;
+            transition: color 0.2s ease;
 
-    video {
-        width: 100%;
-        max-width: 600px;
-        border-radius: 8px;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-        margin: 0 auto;
-        display: block;
+            &:hover {
+                color: ${({ theme }) => theme.linkHoverColor};
+                text-decoration: underline;
+            }
+        }
     }
 `;
 
