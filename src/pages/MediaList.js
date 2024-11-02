@@ -1,10 +1,7 @@
 // src/pages/MediaList.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { getMediaList } from '../services/api';
 import { Link } from 'react-router-dom';
-import SearchBar from '../components/SearchBar';
-import StyledButton from '../components/StyledButton';
+import { getMediaList } from '../services/api';
 import {
     MediaListContainer,
     MediaListHeader,
@@ -17,53 +14,31 @@ import {
     MediaType,
     MediaReleaseDate,
     ViewDetailsButton,
+    SortContainer,
+    SortLabel,
+    SortSelect,
 } from '../styles/MediaList.styles';
 
 function MediaList() {
     const [mediaList, setMediaList] = useState([]);
-    const [query, setQuery] = useState('');
-    const API_URL = process.env.REACT_APP_API_URL;
+    const [sortOrder, setSortOrder] = useState('desc');
 
     useEffect(() => {
         fetchMedia();
-    }, []);
+    }, [sortOrder]);
 
     const fetchMedia = async () => {
         try {
-            const response = await getMediaList();
+            const response = await getMediaList({ sort: sortOrder });
             setMediaList(response.data);
         } catch (error) {
             console.error('Error fetching media list:', error);
         }
     };
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.get(`${API_URL}/media/search/`, {
-                params: { q: query },
-            });
-            setMediaList(response.data);
-        } catch (error) {
-            console.error('Error searching media:', error);
-        }
+    const handleSortChange = (e) => {
+        setSortOrder(e.target.value);
     };
-
-    // Filter media based on search query
-    const filteredMediaList = mediaList.filter((media) => {
-        const searchTerm = query.toLowerCase();
-        return (
-            (media.title && media.title.toLowerCase().includes(searchTerm)) ||
-            (media.categories &&
-                media.categories.some(
-                    (cat) => cat && cat.toLowerCase().includes(searchTerm)
-                )) ||
-            (media.tags &&
-                media.tags.some(
-                    (tag) => tag && tag.toLowerCase().includes(searchTerm)
-                ))
-        );
-    });
 
     return (
         <MediaListContainer>
@@ -73,9 +48,15 @@ function MediaList() {
                     Add New Media
                 </AddMediaButton>
             </MediaListHeader>
-            <SearchBar query={query} setQuery={setQuery} handleSearch={handleSearch} />
+            <SortContainer>
+                <SortLabel htmlFor="sortOrder">Sort by Total Size:</SortLabel>
+                <SortSelect id="sortOrder" value={sortOrder} onChange={handleSortChange}>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </SortSelect>
+            </SortContainer>
             <MediaGrid>
-                {filteredMediaList.map((media) => (
+                {mediaList.map((media) => (
                     <MediaCard key={media.id}>
                         <MediaTitle>{media.title}</MediaTitle>
                         {media.poster_image_url && (

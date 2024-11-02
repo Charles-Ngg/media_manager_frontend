@@ -11,7 +11,9 @@ export const updateActor = (id, actorData) => axios.put(`${API_URL}/actors/${id}
 export const deleteActor = (id) => axios.delete(`${API_URL}/actors/${id}/`);
 
 // Media API calls
-export const getMediaList = () => axios.get(`${API_URL}/media/`);
+export const getMediaList = (params = {}) => {
+    return axios.get(`${API_URL}/media/`, { params });
+};
 export const getMediaById = (id) => axios.get(`${API_URL}/media/${id}/`);
 export const createMedia = (mediaData) => axios.post(`${API_URL}/media/`, mediaData);
 export const updateMedia = (id, mediaData) => axios.put(`${API_URL}/media/${id}/`, mediaData);

@@ -41,11 +41,15 @@ export const MediaGrid = styled.ul`
 `;
 
 export const MediaCard = styled.li`
-    background-color: ${({ theme }) => theme.cardBackground};
+    background-color: #ffffff;
     border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 
     &:hover {
         transform: translateY(-5px);
@@ -54,24 +58,23 @@ export const MediaCard = styled.li`
 `;
 
 export const MediaTitle = styled.h3`
-    font-size: 1.2em;
-    color: ${({ theme }) => theme.textColor};
-    text-align: center;
-    margin-bottom: 10px;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #333333;
 `;
 
 export const MediaPoster = styled.img`
     width: 100%;
-    height: 250px;
-    object-fit: cover;
+    height: auto;
     border-radius: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    object-fit: cover;
 `;
 
 export const MediaType = styled.p`
     font-size: 1em;
-    color: ${({ theme }) => theme.textColor};
-    margin: 5px 0;
+    color: #666666;
+    margin-bottom: 10px;
 `;
 
 export const MediaReleaseDate = styled.p`
@@ -84,3 +87,32 @@ export const ViewDetailsButton = styled(StyledButton)`
     width: 100%;
     text-align: center;
 `; 
+
+// Added Styled Components for Sorting
+export const SortContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+`;
+
+export const SortLabel = styled.label`
+    margin-right: 10px;
+    font-size: 1em;
+    color: #333333;
+`;
+
+export const SortSelect = styled.select`
+    padding: 8px 12px;
+    font-size: 1em;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #333333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #1e90ff;
+    }
+`;

@@ -31,6 +31,7 @@ function MediaDetail() {
     const [tags, setTags] = useState([]);
     const [cast, setCast] = useState([]);
     const [directors, setDirectors] = useState([]);
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         fetchMediaDetail();
@@ -73,6 +74,12 @@ function MediaDetail() {
                 const directorData = directorResponses.map((res) => res.data);
                 setDirectors(directorData);
             }
+
+            // Set files if exists
+            if (mediaData.files && mediaData.files.length > 0) {
+                setFiles(mediaData.files);
+            }
+
         } catch (error) {
             console.error('Error fetching media detail:', error);
         }
@@ -141,16 +148,22 @@ function MediaDetail() {
                 </Section>
             )}
 
-            {media.file_info && (
-                <Section className="media-file-info">
-                    <h3>File Information:</h3>
-                    <p><strong>Resolution:</strong> {media.file_info.resolution || 'N/A'}</p>
-                    <p><strong>File Size:</strong> {media.file_info.file_size ? `${media.file_info.file_size} bytes` : 'N/A'}</p>
-                    <p><strong>Video Codec:</strong> {media.file_info.video_codec || 'N/A'}</p>
-                    <p><strong>Audio Codec:</strong> {media.file_info.audio_codec || 'N/A'}</p>
-                    <p><strong>File Path:</strong> {media.file_info.file_path || 'N/A'}</p>
+            {media.files && (
+                <Section className="media-files">
+                    <h3>Files:</h3>
+                    <ul>
+                        {files.map((file, index) => (
+                            <li key={index}>
+                                <p><strong>File Name:</strong> {file.file_name || 'N/A'}</p>
+                                <p><strong>File Path:</strong> {file.file_path || 'N/A'}</p>
+                                <p><strong>Directory Path:</strong> {file.directory_path || 'N/A'}</p>
+                                <p><strong>File Size:</strong> {file.file_size ? `${(file.file_size / (1024 * 1024 * 1024)).toFixed(2)} GB` : 'N/A'}</p>
+                            </li>
+                        ))}
+                    </ul>
                 </Section>
             )}
+
 
             {media.screenshot_urls && media.screenshot_urls.length > 0 && (
                 <Section className="media-screenshots">
