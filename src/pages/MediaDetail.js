@@ -1,7 +1,7 @@
 // src/pages/MediaDetail.js
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getMediaById, getGenreById, getTagById, getActorById } from '../services/api';
+import { getMediaById, getGenreById, getTagById, getActorById, playMedia, deleteMediaFiles } from '../services/api';
 import styled from 'styled-components';
 import {
     Container,
@@ -10,6 +10,8 @@ import {
     Info,
     Section,
     Loading,
+    PlayButton,
+    DeleteButton,
 } from '../styles/MediaDetail.styles';
 
 // **Define SourceLink here if not exporting from styles**
@@ -85,6 +87,26 @@ function MediaDetail() {
         }
     };
 
+    const handlePlay = async () => {
+        try {
+            await playMedia(id);
+        } catch (error) {
+            alert('Failed to create play link.');
+        }
+    };
+
+    const handleDelete = async () => {
+        if (window.confirm('Are you sure you want to delete all files for this media? This action cannot be undone.')) {
+            try {
+                await deleteMediaFiles(id);
+                alert('Media files deleted successfully.');
+                fetchMediaDetail();
+            } catch (error) {
+                alert('Failed to delete media files.');
+            }
+        }
+    };
+
     if (!media) {
         return <Loading>Loading...</Loading>;
     }
@@ -98,6 +120,14 @@ function MediaDetail() {
                     alt={media.title}
                 />
             )}
+
+            <PlayButton onClick={handlePlay}>
+                Play
+            </PlayButton>
+            <DeleteButton onClick={handleDelete}>
+                Delete
+            </DeleteButton>
+
             <Info>
                 <p><strong>Type:</strong> {media.type || 'N/A'}</p>
                 <p><strong>Release Date:</strong> {media.release_date || 'N/A'}</p>
@@ -206,6 +236,7 @@ function MediaDetail() {
                     </ul>
                 </Section>
             )}
+ 
         </Container>
     );
 }

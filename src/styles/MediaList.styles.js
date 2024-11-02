@@ -41,15 +41,11 @@ export const MediaGrid = styled.ul`
 `;
 
 export const MediaCard = styled.li`
-    background-color: #ffffff;
+    background-color: ${({ theme }) => theme.cardBackground};
     border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
 
     &:hover {
         transform: translateY(-5px);
@@ -58,23 +54,24 @@ export const MediaCard = styled.li`
 `;
 
 export const MediaTitle = styled.h3`
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    color: #333333;
+    font-size: 1.2em;
+    color: ${({ theme }) => theme.textColor};
+    text-align: center;
+    margin-bottom: 10px;
 `;
 
 export const MediaPoster = styled.img`
     width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 15px;
+    height: 250px;
     object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
 `;
 
 export const MediaType = styled.p`
     font-size: 1em;
-    color: #666666;
-    margin-bottom: 10px;
+    color: ${({ theme }) => theme.textColor};
+    margin: 5px 0;
 `;
 
 export const MediaReleaseDate = styled.p`
@@ -114,5 +111,24 @@ export const SortSelect = styled.select`
     &:focus {
         outline: none;
         border-color: #1e90ff;
+    }
+`;
+
+// Added PlayButton and DeleteButton
+export const PlayButton = styled(StyledButton)`
+    margin-top: 10px;
+    background-color: #32cd32;
+
+    &:hover {
+        background-color: #228b22;
+    }
+`;
+
+export const DeleteButton = styled(StyledButton)`
+    margin-top: 10px;
+    background-color: #ff4500;
+
+    &:hover {
+        background-color: #c71800;
     }
 `;

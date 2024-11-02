@@ -11,10 +11,46 @@ export const updateActor = (id, actorData) => axios.put(`${API_URL}/actors/${id}
 export const deleteActor = (id) => axios.delete(`${API_URL}/actors/${id}/`);
 
 // Media API calls
-export const getMediaList = (params = {}) => {
-    return axios.get(`${API_URL}/media/`, { params });
+export const getMediaList = async (params = {}) => {
+    try {
+        const response = await axios.get(`${API_URL}/media/`, { params });
+        return response;
+    } catch (error) {
+        console.error('Error fetching media list:', error);
+        throw error;
+    }
 };
-export const getMediaById = (id) => axios.get(`${API_URL}/media/${id}/`);
+
+export const playMedia = async (mediaId) => {
+    try {
+        const response = await axios.post(`${API_URL}/media/${mediaId}/play/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error playing media:', error);
+        throw error;
+    }
+};
+
+export const deleteMediaFiles = async (mediaId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/media/${mediaId}/delete-files/`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting media files:', error);
+        throw error;
+    }
+};
+
+export const getMediaById = async (mediaId) => {
+    try {
+        const response = await axios.get(`${API_URL}/media/${mediaId}/`);
+        return response;
+    } catch (error) {
+        console.error('Error fetching media details:', error);
+        throw error;
+    }
+};
+
 export const createMedia = (mediaData) => axios.post(`${API_URL}/media/`, mediaData);
 export const updateMedia = (id, mediaData) => axios.put(`${API_URL}/media/${id}/`, mediaData);
 export const deleteMedia = (id) => axios.delete(`${API_URL}/media/${id}/`);

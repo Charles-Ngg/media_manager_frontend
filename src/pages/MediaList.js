@@ -1,7 +1,7 @@
 // src/pages/MediaList.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getMediaList } from '../services/api';
+import { getMediaList, playMedia, deleteMediaFiles } from '../services/api';
 import {
     MediaListContainer,
     MediaListHeader,
@@ -17,6 +17,8 @@ import {
     SortContainer,
     SortLabel,
     SortSelect,
+    PlayButton,
+    DeleteButton,
 } from '../styles/MediaList.styles';
 
 function MediaList() {
@@ -38,6 +40,26 @@ function MediaList() {
 
     const handleSortChange = (e) => {
         setSortOrder(e.target.value);
+    };
+
+    const handlePlay = async (mediaId) => {
+        try {
+            await playMedia(mediaId);
+        } catch (error) {
+            alert('Failed to create play link.');
+        }
+    };
+
+    const handleDelete = async (mediaId) => {
+        if (window.confirm('Are you sure you want to delete all files for this media? This action cannot be undone.')) {
+            try {
+                await deleteMediaFiles(mediaId);
+                alert('Media files deleted successfully.');
+                fetchMedia();
+            } catch (error) {
+                alert('Failed to delete media files.');
+            }
+        }
     };
 
     return (
@@ -70,6 +92,12 @@ function MediaList() {
                         <ViewDetailsButton as={Link} to={`/media/${media.id}`}>
                             View Details
                         </ViewDetailsButton>
+                        <PlayButton onClick={() => handlePlay(media.id)}>
+                            Play
+                        </PlayButton>
+                        <DeleteButton onClick={() => handleDelete(media.id)}>
+                            Delete
+                        </DeleteButton>
                     </MediaCard>
                 ))}
             </MediaGrid>

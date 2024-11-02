@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import StyledButton from '../components/StyledButton';
 import { Link } from 'react-router-dom';
 
 export const Container = styled.div`
@@ -109,3 +110,22 @@ export const SourceLink = styled.a`
         text-decoration: underline;
     }
 `; 
+
+// Added PlayButton and DeleteButton
+export const PlayButton = styled(StyledButton)`
+    margin-top: 20px;
+    background-color: #32cd32;
+
+    &:hover {
+        background-color: #228b22;
+    }
+`;
+
+export const DeleteButton = styled(StyledButton)`
+    margin-top: 10px;
+    background-color: #ff4500;
+
+    &:hover {
+        background-color: #c71800;
+    }
+`;
