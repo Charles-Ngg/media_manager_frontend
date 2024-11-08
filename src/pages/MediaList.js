@@ -19,6 +19,9 @@ import {
     SortSelect,
     PlayButton,
     DeleteButton,
+    FilterContainer,
+    FilterLabel,
+    FilterSelect,
 } from '../styles/MediaList.styles';
 import LikeDislikeButtons from '../components/LikeDislikeButtons';
 import RatingStar from '../components/RatingStar';
@@ -26,14 +29,25 @@ import RatingStar from '../components/RatingStar';
 function MediaList() {
     const [mediaList, setMediaList] = useState([]);
     const [sortOrder, setSortOrder] = useState('desc');
+    const [sortBy, setSortBy] = useState('total_size');
+    const [likeStateFilter, setLikeStateFilter] = useState('all');
 
     useEffect(() => {
         fetchMedia();
-    }, [sortOrder]);
+    }, [sortOrder, sortBy, likeStateFilter]);
 
     const fetchMedia = async () => {
         try {
-            const response = await getMediaList({ sort: sortOrder });
+            const params = {
+                sort_order: sortOrder,
+                sort_by: sortBy,
+            };
+
+            if (likeStateFilter !== 'all') {
+                params.like_state = likeStateFilter;
+            }
+
+            const response = await getMediaList(params);
             const mediaData = response.data.map((media) => ({
                 ...media,
                 rating: typeof media.rating === 'number' ? media.rating : 0,
@@ -44,8 +58,16 @@ function MediaList() {
         }
     };
 
-    const handleSortChange = (e) => {
+    const handleSortOrderChange = (e) => {
         setSortOrder(e.target.value);
+    };
+
+    const handleSortByChange = (e) => {
+        setSortBy(e.target.value);
+    };
+
+    const handleFilterChange = (e) => {
+        setLikeStateFilter(e.target.value);
     };
 
     const handlePlay = async (mediaId) => {
@@ -80,14 +102,14 @@ function MediaList() {
         }
 
         try {
-            await likeMedia(mediaId, newLikeState, newDislikeState);
+            await likeMedia(mediaId, newLikeState);
             // Update local state
             setMediaList(mediaList.map(media => 
                 media.id === mediaId ? { 
                     ...media, 
                     like_state: newLikeState, 
-                    dislikes: newDislikeState === 'no_liked' ? media.dislikes : media.dislikes - 1,
-                    likes: newLikeState === 'liked' ? (media.likes || 0) + 1 : (media.likes || 0) - 1 
+                    dislikes: newDislikeState === 'no_liked' ? media.dislikes : (media.dislikes || 1) - 1,
+                    likes: newLikeState === 'liked' ? (media.likes || 0) + 1 : (media.likes || 1) - 1 
                 } : media
             ));
         } catch (error) {
@@ -108,14 +130,14 @@ function MediaList() {
         }
 
         try {
-            await likeMedia(mediaId, newLikeStateValue, newLikeStateRevert);
+            await likeMedia(mediaId, newLikeStateValue);
             // Update local state
             setMediaList(mediaList.map(media => 
                 media.id === mediaId ? { 
                     ...media, 
                     like_state: newLikeStateValue, 
-                    likes: newLikeStateRevert === 'no_liked' ? media.likes : media.likes - 1,
-                    dislikes: newLikeStateValue === 'disliked' ? (media.dislikes || 0) + 1 : (media.dislikes || 0) - 1 
+                    likes: newLikeStateRevert === 'no_liked' ? media.likes : (media.likes || 1) - 1,
+                    dislikes: newLikeStateValue === 'disliked' ? (media.dislikes || 0) + 1 : (media.dislikes || 1) - 1 
                 } : media
             ));
         } catch (error) {
@@ -147,9 +169,23 @@ function MediaList() {
                     Add New Media
                 </AddMediaButton>
             </MediaListHeader>
+            <FilterContainer>
+                <FilterLabel htmlFor="likeStateFilter">Filter by Like State:</FilterLabel>
+                <FilterSelect id="likeStateFilter" value={likeStateFilter} onChange={handleFilterChange}>
+                    <option value="all">All</option>
+                    <option value="liked">Liked</option>
+                    <option value="no_liked">No Liked</option>
+                    <option value="disliked">Disliked</option>
+                </FilterSelect>
+            </FilterContainer>
             <SortContainer>
-                <SortLabel htmlFor="sortOrder">Sort by Total Size:</SortLabel>
-                <SortSelect id="sortOrder" value={sortOrder} onChange={handleSortChange}>
+                <SortLabel htmlFor="sortBy">Sort by:</SortLabel>
+                <SortSelect id="sortBy" value={sortBy} onChange={handleSortByChange}>
+                    <option value="total_size">Total Size</option>
+                    <option value="rating">Rating</option>
+                </SortSelect>
+                <SortLabel htmlFor="sortOrder">Order:</SortLabel>
+                <SortSelect id="sortOrder" value={sortOrder} onChange={handleSortOrderChange}>
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </SortSelect>
@@ -165,7 +201,7 @@ function MediaList() {
                             />
                         )}
                         <MediaType>Type: {media.type}</MediaType>
-                        <MediaReleaseDate>Release Date: {media.release_date}</MediaReleaseDate>
+                        <MediaReleaseDate>Release Date: {new Date(media.release_date).toLocaleDateString()}</MediaReleaseDate>
                         <ViewDetailsButton as={Link} to={`/media/${media.id}`}>
                             View Details
                         </ViewDetailsButton>

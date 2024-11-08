@@ -132,3 +132,33 @@ export const DeleteButton = styled(StyledButton)`
         background-color: #c71800;
     }
 `;
+
+export const FilterContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-right: 20px;
+`;
+
+export const FilterLabel = styled.label`
+    margin-right: 10px;
+    font-size: 1em;
+    color: #333333;
+`;
+
+export const FilterSelect = styled.select`
+    padding: 8px 12px;
+    font-size: 1em;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #333333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+    margin-right: 20px;
+
+    &:focus {
+        outline: none;
+        border-color: #1e90ff;
+    }
+`;
