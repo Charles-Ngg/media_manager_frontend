@@ -1,4 +1,3 @@
-
 # **Media Management System (Frontend) with React**
 
 This project is the **Frontend** of the Media Management System, built using **React.js**. The frontend provides an interactive user interface for managing a large and diverse collection of media files. Users can view media lists, access detailed media and actor pages, perform searches, and interact with media items by rating, tagging, and liking them.
@@ -21,6 +20,13 @@ This project is the **Frontend** of the Media Management System, built using **R
   - [**Conclusion**](#conclusion)
   - [**License**](#license)
   - [**Contributors**](#contributors)
+  - [**Media List Sorting**](#media-list-sorting)
+    - [Sorting Media by Total Size](#sorting-media-by-total-size)
+      - [**Sorting Controls**](#sorting-controls)
+      - [**Usage**](#usage)
+      - [**Example**](#example)
+      - [**API Interaction**](#api-interaction)
+    - [Additional Considerations](#additional-considerations)
 
 ---
 
@@ -202,3 +208,84 @@ This project is licensed under the MIT License.
 
 - **Your Name**: Frontend Developer & Maintainer  
 - **OpenAI**: Assistant for project planning and guidance  
+
+---
+
+## **Media List Sorting**
+
+### Sorting Media by Total Size
+
+Users can now sort the media list based on the total size of all files within each media item. The sorting can be done in ascending or descending order.
+
+#### **Sorting Controls**
+
+On the **Media List** page, a dropdown is available to select the desired sorting order:
+
+- **Descending:** Sorts media from largest to smallest total size.
+- **Ascending:** Sorts media from smallest to largest total size.
+
+#### **Usage**
+
+1. **Navigate to the Media List Page:**
+   
+   Open the frontend application and go to the **Media List** section.
+
+2. **Select Sorting Order:**
+   
+   Use the **Sort by Total Size** dropdown to choose either **Ascending** or **Descending**.
+
+3. **View Sorted Media:**
+   
+   The media list will automatically refresh and display the media items sorted based on the selected order.
+
+#### **Example**
+
+- **Sort Media by Total Size in Descending Order (Default):**
+
+  ![Default Sorting](./assets/default-sorting.png)
+
+- **Sort Media by Total Size in Ascending Order:**
+
+  ![Ascending Sorting](./assets/ascending-sorting.png)
+
+#### **API Interaction**
+
+When a user selects a sorting order, the frontend sends a GET request to the backend API with the `sort` query parameter:
+
+- **Descending Order (Default):**
+
+  ```
+  GET /api/media/?sort=desc
+  ```
+
+- **Ascending Order:**
+
+  ```
+  GET /api/media/?sort=asc
+  ```
+
+The backend responds with the media list sorted by the combined `total_size` of all associated files.
+
+---
+
+By implementing these changes, users can effortlessly sort the media list based on the total size of media files, enhancing the usability and functionality of your Media Management System.
+
+---
+
+### Additional Considerations
+
+- **Loading States:** 
+  - Implement loading indicators to improve user experience while data is being fetched.
+
+- **Error Handling:**
+  - Display user-friendly error messages if the API request fails or returns an error.
+
+- **Responsive Design:**
+  - Ensure that the sorting controls are accessible and properly styled across different devices and screen sizes.
+
+- **Caching:**
+  - Consider caching sorted results if performance becomes an issue with large datasets.
+
+---
+
+Feel free to further customize the sorting controls and integrate additional features as needed!
