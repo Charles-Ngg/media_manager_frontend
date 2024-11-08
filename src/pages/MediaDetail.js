@@ -1,7 +1,7 @@
 // src/pages/MediaDetail.js
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getMediaById, getGenreById, getTagById, getActorById, playMedia, deleteMediaFiles } from '../services/api';
+import { getMediaById, getGenreById, getTagById, getActorById, playMedia, deleteMediaFiles, likeMedia, rateMedia } from '../services/api';
 import styled from 'styled-components';
 import {
     Container,
@@ -12,19 +12,10 @@ import {
     Loading,
     PlayButton,
     DeleteButton,
+    SourceLink,
 } from '../styles/MediaDetail.styles';
-
-// **Define SourceLink here if not exporting from styles**
-const SourceLink = styled.a`
-    color: ${({ theme }) => theme.linkColor};
-    text-decoration: none;
-    transition: color 0.2s ease;
-
-    &:hover {
-        color: ${({ theme }) => theme.linkHoverColor};
-        text-decoration: underline;
-    }
-`;
+import LikeDislikeButtons from '../components/LikeDislikeButtons';
+import RatingStar from '../components/RatingStar';
 
 function MediaDetail() {
     const { id } = useParams();
@@ -43,9 +34,11 @@ function MediaDetail() {
         try {
             const response = await getMediaById(id);
             const mediaData = response.data;
+            // Ensure rating is a number
+            mediaData.rating = typeof mediaData.rating === 'number' ? mediaData.rating : 0;
             setMedia(mediaData);
 
-            // Fetch genres if genre_ids exists
+            // Fetch genres
             if (mediaData.genre_ids && mediaData.genre_ids.length > 0) {
                 const genrePromises = mediaData.genre_ids.map((genreId) => getGenreById(genreId));
                 const genreResponses = await Promise.all(genrePromises);
@@ -53,7 +46,7 @@ function MediaDetail() {
                 setGenres(genreNames);
             }
 
-            // Fetch tags if tag_ids exists
+            // Fetch tags
             if (mediaData.tag_ids && mediaData.tag_ids.length > 0) {
                 const tagPromises = mediaData.tag_ids.map((tagId) => getTagById(tagId));
                 const tagResponses = await Promise.all(tagPromises);
@@ -61,7 +54,7 @@ function MediaDetail() {
                 setTags(tagNames);
             }
 
-            // Fetch cast actors if cast_ids exists
+            // Fetch cast actors
             if (mediaData.cast_ids && mediaData.cast_ids.length > 0) {
                 const castPromises = mediaData.cast_ids.map((actorId) => getActorById(actorId));
                 const castResponses = await Promise.all(castPromises);
@@ -69,7 +62,7 @@ function MediaDetail() {
                 setCast(castData);
             }
 
-            // Fetch directors if director_ids exists
+            // Fetch directors
             if (mediaData.director_ids && mediaData.director_ids.length > 0) {
                 const directorPromises = mediaData.director_ids.map((directorId) => getActorById(directorId));
                 const directorResponses = await Promise.all(directorPromises);
@@ -77,7 +70,7 @@ function MediaDetail() {
                 setDirectors(directorData);
             }
 
-            // Set files if exists
+            // Set files
             if (mediaData.files && mediaData.files.length > 0) {
                 setFiles(mediaData.files);
             }
@@ -107,6 +100,69 @@ function MediaDetail() {
         }
     };
 
+    const handleLike = async (currentLikeState) => {
+        let newLikeState = 'liked';
+        let newDislikeState = 'no_liked';
+
+        if (currentLikeState === 'liked') {
+            newLikeState = 'no_liked';
+        } else if (currentLikeState === 'disliked') {
+            newLikeState = 'liked';
+            newDislikeState = 'no_liked';
+        }
+
+        try {
+            await likeMedia(id, newLikeState, newDislikeState);
+            // Update local state
+            setMedia({ 
+                ...media, 
+                like_state: newLikeState, 
+                dislikes: newDislikeState === 'no_liked' ? media.dislikes : media.dislikes - 1,
+                likes: newLikeState === 'liked' ? (media.likes || 0) + 1 : (media.likes || 0) - 1 
+            });
+        } catch (error) {
+            console.error('Error liking media:', error);
+        }
+    };
+
+    const handleDislike = async (currentLikeState) => {
+        let newLikeState = 'disliked';
+        let newLikeStateValue = 'disliked';
+        let newLikeStateRevert = 'no_liked';
+
+        if (currentLikeState === 'disliked') {
+            newLikeStateValue = 'no_liked';
+        } else if (currentLikeState === 'liked') {
+            newLikeStateValue = 'disliked';
+            newLikeStateRevert = 'no_liked';
+        }
+
+        try {
+            await likeMedia(id, newLikeStateValue, newLikeStateRevert);
+            // Update local state
+            setMedia({ 
+                ...media, 
+                like_state: newLikeStateValue, 
+                likes: newLikeStateRevert === 'no_liked' ? media.likes : media.likes - 1,
+                dislikes: newLikeStateValue === 'disliked' ? (media.dislikes || 0) + 1 : (media.dislikes || 0) - 1 
+            });
+        } catch (error) {
+            console.error('Error disliking media:', error);
+        }
+    };
+
+    const handleRate = async (ratingValue) => {
+        try {
+            await rateMedia(id, ratingValue);
+            setMedia({ 
+                ...media, 
+                rating: typeof ratingValue === 'number' ? ratingValue : media.rating 
+            });
+        } catch (error) {
+            console.error('Error rating media:', error);
+        }
+    };
+
     if (!media) {
         return <Loading>Loading...</Loading>;
     }
@@ -115,18 +171,23 @@ function MediaDetail() {
         <Container>
             <Title>{media.title}</Title>
             {media.poster_image_url && (
-                <Poster
-                    src={media.poster_image_url}
-                    alt={media.title}
-                />
+                <Poster src={media.poster_image_url} alt={media.title} />
             )}
-
             <PlayButton onClick={handlePlay}>
                 Play
             </PlayButton>
             <DeleteButton onClick={handleDelete}>
                 Delete
             </DeleteButton>
+            <LikeDislikeButtons 
+                likeState={media.like_state} 
+                onLike={() => handleLike(media.like_state)} 
+                onDislike={() => handleDislike(media.like_state)} 
+            />
+            <RatingStar 
+                rating={media.rating} 
+                onRate={(newRating) => handleRate(newRating)} 
+            />
 
             <Info>
                 <p><strong>Type:</strong> {media.type || 'N/A'}</p>
@@ -194,7 +255,6 @@ function MediaDetail() {
                 </Section>
             )}
 
-
             {media.screenshot_urls && media.screenshot_urls.length > 0 && (
                 <Section className="media-screenshots">
                     <h3>Screenshots:</h3>
@@ -236,7 +296,7 @@ function MediaDetail() {
                     </ul>
                 </Section>
             )}
- 
+     
         </Container>
     );
 }

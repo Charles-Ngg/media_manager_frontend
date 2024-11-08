@@ -1,6 +1,6 @@
 // src/pages/ActorDetail.js
 import React, { useEffect, useState } from 'react';
-import { getActorById } from '../services/api';
+import { getActorById, likeActor, rateActor } from '../services/api';
 import { useParams, Link } from 'react-router-dom';
 import {
     Container,
@@ -13,9 +13,11 @@ import {
     NoActor,
     ProfileGallery,
 } from '../styles/ActorDetail.styles';
+import LikeDislikeButtons from '../components/LikeDislikeButtons';
+import RatingStar from '../components/RatingStar';
 
 function ActorDetail() {
-    const { id } = useParams(); // Extract the actor ID from the URL
+    const { id } = useParams();
     const [actor, setActor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -27,12 +29,78 @@ function ActorDetail() {
     const fetchActorDetail = async () => {
         try {
             const response = await getActorById(id);
-            setActor(response.data);
+            const actorData = response.data;
+            // Ensure rating is a number
+            actorData.rating = typeof actorData.rating === 'number' ? actorData.rating : 0;
+            setActor(actorData);
             setLoading(false);
         } catch (err) {
             console.error('Error fetching actor details:', err);
             setError('Failed to fetch actor details.');
             setLoading(false);
+        }
+    };
+
+    const handleLike = async (currentLikeState) => {
+        let newLikeState = 'liked';
+        let newDislikeState = 'no_liked';
+
+        if (currentLikeState === 'liked') {
+            newLikeState = 'no_liked';
+        } else if (currentLikeState === 'disliked') {
+            newLikeState = 'liked';
+            newDislikeState = 'no_liked';
+        }
+
+        try {
+            await likeActor(id, newLikeState, newDislikeState);
+            // Update local state
+            setActor({
+                ...actor,
+                like_state: newLikeState,
+                dislikes: newDislikeState === 'no_liked' ? actor.dislikes : actor.dislikes - 1,
+                likes: newLikeState === 'liked' ? (actor.likes || 0) + 1 : (actor.likes || 0) - 1
+            });
+        } catch (error) {
+            console.error('Error liking actor:', error);
+        }
+    };
+
+    const handleDislike = async (currentLikeState) => {
+        let newLikeState = 'disliked';
+        let newLikeStateValue = 'disliked';
+        let newLikeStateRevert = 'no_liked';
+
+        if (currentLikeState === 'disliked') {
+            newLikeStateValue = 'no_liked';
+        } else if (currentLikeState === 'liked') {
+            newLikeStateValue = 'disliked';
+            newLikeStateRevert = 'no_liked';
+        }
+
+        try {
+            await likeActor(id, newLikeStateValue, newLikeStateRevert);
+            // Update local state
+            setActor({
+                ...actor,
+                like_state: newLikeStateValue,
+                likes: newLikeStateRevert === 'none' ? actor.likes : actor.likes - 1,
+                dislikes: newLikeStateValue === 'disliked' ? (actor.dislikes || 0) + 1 : (actor.dislikes || 0) - 1
+            });
+        } catch (error) {
+            console.error('Error disliking actor:', error);
+        }
+    };
+
+    const handleRate = async (ratingValue) => {
+        try {
+            await rateActor(id, ratingValue);
+            setActor({
+                ...actor,
+                rating: typeof ratingValue === 'number' ? ratingValue : actor.rating
+            });
+        } catch (error) {
+            console.error('Error rating actor:', error);
         }
     };
 
@@ -54,6 +122,19 @@ function ActorDetail() {
                     ))}
                 </ProfileGallery>
             )}
+
+            <LikeDislikeButtons
+                likeState={actor.like_state}
+                onLike={() => handleLike(actor.like_state)}
+                onDislike={() => handleDislike(actor.like_state)}
+                likesCount={actor.likes}
+                dislikesCount={actor.dislikes}
+            />
+
+            <RatingStar
+                rating={actor.rating}
+                onRate={(newRating) => handleRate(newRating)}
+            />
 
             <Info>
                 <p><strong>Aliases:</strong> {actor.alias.length > 0 ? actor.alias.join(', ') : 'N/A'}</p>

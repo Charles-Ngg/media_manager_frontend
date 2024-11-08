@@ -21,6 +21,12 @@ export const getMediaList = async (params = {}) => {
     }
 };
 
+export const getMediaById = (id) => axios.get(`${API_URL}/media/${id}/`);
+export const createMedia = (mediaData) => axios.post(`${API_URL}/media/`, mediaData);
+export const updateMedia = (id, mediaData) => axios.put(`${API_URL}/media/${id}/`, mediaData);
+export const deleteMedia = (id) => axios.delete(`${API_URL}/media/${id}/`);
+
+// Play and Delete Files
 export const playMedia = async (mediaId) => {
     try {
         const response = await axios.post(`${API_URL}/media/${mediaId}/play/`);
@@ -41,33 +47,20 @@ export const deleteMediaFiles = async (mediaId) => {
     }
 };
 
-export const getMediaById = async (mediaId) => {
-    try {
-        const response = await axios.get(`${API_URL}/media/${mediaId}/`);
-        return response;
-    } catch (error) {
-        console.error('Error fetching media details:', error);
-        throw error;
-    }
-};
+// Like and Rating API calls
+// Media Like and Rating
+export const likeMedia = (mediaId, likeState) => 
+    axios.post(`${API_URL}/media/${mediaId}/like/`, { like_state: likeState });
 
-export const createMedia = (mediaData) => axios.post(`${API_URL}/media/`, mediaData);
-export const updateMedia = (id, mediaData) => axios.put(`${API_URL}/media/${id}/`, mediaData);
-export const deleteMedia = (id) => axios.delete(`${API_URL}/media/${id}/`);
+export const rateMedia = (mediaId, ratingValue) => 
+    axios.post(`${API_URL}/media/${mediaId}/rate/`, { rating_value: ratingValue });
 
-// Ratings API calls
-export const getRatings = () => axios.get(`${API_URL}/ratings/`);
-export const createRating = (ratingData) => axios.post(`${API_URL}/ratings/`, ratingData);
+// Actor Like and Rating
+export const likeActor = (actorId, likeState) => 
+    axios.post(`${API_URL}/actors/${actorId}/like/`, { like_state: likeState });
 
-// Users API calls (if applicable)
-export const getUsers = () => axios.get(`${API_URL}/users/`);
-export const getUserById = (id) => axios.get(`${API_URL}/users/${id}/`);
-export const createUser = (userData) => axios.post(`${API_URL}/users/`, userData);
-export const updateUser = (id, userData) => axios.put(`${API_URL}/users/${id}/`, userData);
-export const deleteUser = (id) => axios.delete(`${API_URL}/users/${id}/`);
-
-// Tags API calls
-export const getTags = () => axios.get(`${API_URL}/tags/`);
+export const rateActor = (actorId, ratingValue) => 
+    axios.post(`${API_URL}/actors/${actorId}/rate/`, { rating_value: ratingValue });
 
 // Categories API calls
 export const getCategories = () => axios.get(`${API_URL}/categories/`);
