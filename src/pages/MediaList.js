@@ -1,5 +1,5 @@
 // src/pages/MediaList.js
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getMediaList, playMedia, deleteMediaFiles, likeMedia, rateMedia } from '../services/api';
 import {
@@ -25,12 +25,13 @@ import {
 } from '../styles/MediaList.styles';
 import LikeDislikeButtons from '../components/LikeDislikeButtons';
 import RatingStar from '../components/RatingStar';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function MediaList() {
     const [mediaList, setMediaList] = useState([]);
-    const [sortOrder, setSortOrder] = useState('desc');
-    const [sortBy, setSortBy] = useState('total_size');
-    const [likeStateFilter, setLikeStateFilter] = useState('all');
+    const [sortOrder, setSortOrder] = useLocalStorage('sortOrder', 'desc');
+    const [sortBy, setSortBy] = useLocalStorage('sortBy', 'total_size');
+    const [likeStateFilter, setLikeStateFilter] = useLocalStorage('likeStateFilter', 'all');
 
     useEffect(() => {
         fetchMedia();
