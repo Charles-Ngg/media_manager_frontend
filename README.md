@@ -11,6 +11,7 @@ This project is the **Frontend** of the Media Management System, built using **R
   - [**Project Features**](#project-features)
   - [**Tech Stack**](#tech-stack)
   - [**Development Environment Setup**](#development-environment-setup)
+  - [**Docker Setup**](#docker-setup)
   - [**Project Structure**](#project-structure)
   - [**Running the Project**](#running-the-project)
   - [**Environment Variables**](#environment-variables)
@@ -56,6 +57,7 @@ This project is the **Frontend** of the Media Management System, built using **R
 - **HTTP Client:** Axios  
 - **UI Library (Optional):** Material-UI, Ant Design, or Bootstrap  
 - **Package Management:** npm or Yarn  
+- **Containerization:** Docker
 
 ---
 
@@ -81,6 +83,44 @@ This project is the **Frontend** of the Media Management System, built using **R
     ```bash
     REACT_APP_API_URL=http://192.168.1.100:8000/api  # Replace with your backend IP
     ```
+
+---
+
+## **Docker Setup**
+
+The project includes Docker configuration for easy deployment and consistent environments.
+
+1. **Prerequisites:**
+   - Docker
+   - Docker Compose
+
+2. **Build and Run with Docker:**
+
+    ```bash
+    # Build and start the container
+    docker-compose up -d
+
+    # Stop the container
+    docker-compose down
+    ```
+
+3. **Access the Application:**
+   
+   The application will be available at:
+   ```
+   http://localhost:3000
+   ```
+
+4. **Environment Configuration:**
+   
+   The Docker setup uses environment variables from the `.env` file. Make sure to configure:
+   ```
+   REACT_APP_API_URL=http://your-backend-api-url
+   ```
+
+5. **Docker Files:**
+   - `Dockerfile`: Multi-stage build configuration for production-ready image
+   - `docker-compose.yml`: Service orchestration with environment variables and port mapping
 
 ---
 

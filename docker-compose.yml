@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+      # Add your environment variables here if needed
+      - REACT_APP_API_URL=http://10.247.1.150:8000/api
+    restart: unless-stopped
+    # Uncomment below if you need to connect to other services
+    # networks:
+    #   - app-network
+
+# Uncomment below if you need to create a network for connecting to other services
+# networks:
+#   app-network:
+#     driver: bridge 
