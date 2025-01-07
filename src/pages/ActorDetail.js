@@ -1,6 +1,6 @@
 // src/pages/ActorDetail.js
 import React, { useEffect, useState } from 'react';
-import { getActorById, likeActor, rateActor } from '../services/api';
+import { getActorById, likeActor, rateActor, getActorMedia } from '../services/api';
 import { useParams, Link } from 'react-router-dom';
 import {
     Container,
@@ -19,11 +19,13 @@ import RatingStar from '../components/RatingStar';
 function ActorDetail() {
     const { id } = useParams();
     const [actor, setActor] = useState(null);
+    const [actorMedia, setActorMedia] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         fetchActorDetail();
+        fetchActorMedia();
     }, [id]);
 
     const fetchActorDetail = async () => {
@@ -38,6 +40,15 @@ function ActorDetail() {
             console.error('Error fetching actor details:', err);
             setError('Failed to fetch actor details.');
             setLoading(false);
+        }
+    };
+
+    const fetchActorMedia = async () => {
+        try {
+            const response = await getActorMedia(id);
+            setActorMedia(response.data);
+        } catch (err) {
+            console.error('Error fetching actor media:', err);
         }
     };
 
@@ -199,6 +210,30 @@ function ActorDetail() {
                             </li>
                         ))}
                     </ul>
+                </Section>
+            )}
+
+            {actorMedia && actorMedia.length > 0 && (
+                <Section className="media-section">
+                    <h3>Media List</h3>
+                    <div className="media-grid">
+                        {actorMedia.map((media) => (
+                            <div key={media.id} className="media-item">
+                                <Link to={`/media/${media.id}`}>
+                                    <h4>{media.title}</h4>
+                                    {media.cover_image && (
+                                        <img 
+                                            src={media.cover_image} 
+                                            alt={media.title} 
+                                            className="media-cover"
+                                        />
+                                    )}
+                                    <p>Release Date: {media.release_date || 'N/A'}</p>
+                                    <p>Rating: {media.rating || 'Not rated'}</p>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
                 </Section>
             )}
         </Container>
