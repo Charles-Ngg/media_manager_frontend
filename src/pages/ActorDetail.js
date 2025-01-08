@@ -115,6 +115,13 @@ function ActorDetail() {
         }
     };
 
+    const getRandomImages = (images, count) => {
+        if (!images || images.length <= count) return images;
+        
+        const shuffled = [...images].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    };
+
     if (loading) return <Loading>Loading actor details...</Loading>;
     if (error) return <ErrorMessage>{error}</ErrorMessage>;
     if (!actor) return <NoActor>No actor found.</NoActor>;
@@ -124,7 +131,7 @@ function ActorDetail() {
             <Name>{actor.name}</Name>
             {actor.profile_image_urls && actor.profile_image_urls.length > 0 && (
                 <ProfileGallery>
-                    {actor.profile_image_urls.map((url, index) => (
+                    {getRandomImages(actor.profile_image_urls, 6).map((url, index) => (
                         <ProfileImage
                             key={index}
                             src={url}
@@ -221,15 +228,18 @@ function ActorDetail() {
                             <div key={media.id} className="media-item">
                                 <Link to={`/media/${media.id}`}>
                                     <h4>{media.title}</h4>
-                                    {media.cover_image && (
+                                    {media.poster_image_url && (
                                         <img 
-                                            src={media.cover_image} 
+                                            src={media.poster_image_url} 
                                             alt={media.title} 
                                             className="media-cover"
                                         />
                                     )}
                                     <p>Release Date: {media.release_date || 'N/A'}</p>
                                     <p>Rating: {media.rating || 'Not rated'}</p>
+                                    <p>Like Status: {media.like_state === 'liked' ? '❤️ Liked' : 
+                                                    media.like_state === 'disliked' ? '👎 Disliked' : 
+                                                    '🤍 Not Liked'}</p>
                                 </Link>
                             </div>
                         ))}

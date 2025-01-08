@@ -163,6 +163,13 @@ function MediaDetail() {
         }
     };
 
+    const getRandomImages = (images, count) => {
+        if (!images || images.length <= count) return images;
+        
+        const shuffled = [...images].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, count);
+    };
+
     if (!media) {
         return <Loading>Loading...</Loading>;
     }
@@ -259,7 +266,7 @@ function MediaDetail() {
                 <Section className="media-screenshots">
                     <h3>Screenshots:</h3>
                     <div className="screenshot-gallery">
-                        {media.screenshot_urls.map((url, index) => (
+                        {getRandomImages(media.screenshot_urls, 6).map((url, index) => (
                             <img
                                 key={index}
                                 src={url}
