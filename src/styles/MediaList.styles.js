@@ -162,3 +162,32 @@ export const FilterSelect = styled.select`
         border-color: #1e90ff;
     }
 `;
+
+export const NavigationBar = styled.nav`
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: ${({ theme }) => theme.cardBackground};
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+export const NavLink = styled(Link)`
+    padding: 0.5rem 1rem;
+    margin: 0 1rem;
+    text-decoration: none;
+    color: ${({ theme }) => theme.textColor};
+    font-weight: 500;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: ${({ theme }) => theme.hoverBackground};
+    }
+
+    &.active {
+        background-color: ${({ theme }) => theme.primaryColor};
+        color: white;
+    }
+`;

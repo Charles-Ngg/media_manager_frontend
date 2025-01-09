@@ -22,6 +22,8 @@ import {
     FilterContainer,
     FilterLabel,
     FilterSelect,
+    NavigationBar,
+    NavLink,
 } from '../styles/MediaList.styles';
 import LikeDislikeButtons from '../components/LikeDislikeButtons';
 import RatingStar from '../components/RatingStar';
@@ -164,6 +166,11 @@ function MediaList() {
 
     return (
         <MediaListContainer>
+            <NavigationBar>
+                <NavLink to="/media" className="active">Media List</NavLink>
+                <NavLink to="/actors">Actor List</NavLink>
+            </NavigationBar>
+
             <MediaListHeader>
                 <HeaderTitle>Media List</HeaderTitle>
                 <AddMediaButton as={Link} to="/add-media">
