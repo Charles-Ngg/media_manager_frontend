@@ -64,6 +64,67 @@ export const AddButton = styled(Link)`
     }
 `;
 
+export const SortContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: ${({ theme }) => theme.cardBackground};
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+export const SortLabel = styled.label`
+    margin-right: 1rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.textColor};
+`;
+
+export const SortSelect = styled.select`
+    padding: 0.5rem;
+    margin-right: 2rem;
+    border: 1px solid ${({ theme }) => theme.borderColor};
+    border-radius: 4px;
+    background-color: white;
+    color: ${({ theme }) => theme.textColor};
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+        border-color: ${({ theme }) => theme.primaryColor};
+    }
+`;
+
+export const FilterContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: ${({ theme }) => theme.cardBackground};
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
+
+export const FilterLabel = styled.label`
+    margin-right: 1rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.textColor};
+`;
+
+export const FilterSelect = styled.select`
+    padding: 0.5rem;
+    border: 1px solid ${({ theme }) => theme.borderColor};
+    border-radius: 4px;
+    background-color: white;
+    color: ${({ theme }) => theme.textColor};
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+        border-color: ${({ theme }) => theme.primaryColor};
+    }
+`;
+
 export const ActorGrid = styled.div`
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -75,20 +136,11 @@ export const ActorCard = styled.div`
     background-color: ${({ theme }) => theme.cardBackground};
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
 
     &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    .actor-actions {
-        padding: 1rem;
-        border-top: 1px solid ${({ theme }) => theme.borderColor};
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        transform: translateY(-4px);
     }
 `;
 
@@ -102,27 +154,20 @@ export const ActorImage = styled.img`
     width: 100%;
     height: 300px;
     object-fit: cover;
-    border-bottom: 1px solid ${({ theme }) => theme.borderColor};
 `;
 
 export const ActorName = styled.h3`
     margin: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: ${({ theme }) => theme.textColor};
 `;
 
 export const ActorInfo = styled.div`
-    padding: 0 1rem 1rem;
-    color: ${({ theme }) => theme.textColorLight};
+    padding: 1rem;
+    color: ${({ theme }) => theme.textColor};
 
-    p {
+    div {
         margin: 0.5rem 0;
-        font-size: 0.9rem;
-        line-height: 1.4;
-
-        strong {
-            color: ${({ theme }) => theme.textColor};
-        }
     }
 `;
 

@@ -4,7 +4,15 @@ import axios from 'axios';
 const API_URL = process.env.REACT_APP_API_URL;
 
 // Actors API calls
-export const getActors = () => axios.get(`${API_URL}/actors/`);
+export const getActors = async (params = {}) => {
+    try {
+        const response = await axios.get(`${API_URL}/actors/`, { params });
+        return response;
+    } catch (error) {
+        console.error('Error fetching actors list:', error);
+        throw error;
+    }
+};
 export const getActorById = (id) => axios.get(`${API_URL}/actors/${id}/`);
 export const createActor = (actorData) => axios.post(`${API_URL}/actors/`, actorData);
 export const updateActor = (id, actorData) => axios.put(`${API_URL}/actors/${id}/`, actorData);

@@ -17,7 +17,7 @@ function Navbar({ toggleTheme, currentTheme }) {
                     <StyledLink to="/">Media List</StyledLink>
                 </NavItem>
                 <NavItem>
-                    <StyledLink to="/add-media">Add Media</StyledLink>
+                    <StyledLink to="/actors">Actor List</StyledLink>
                 </NavItem>
                 <NavItem>
                     <ThemeToggle onClick={toggleTheme}>

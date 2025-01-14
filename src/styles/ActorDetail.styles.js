@@ -64,15 +64,26 @@ export const Info = styled.div`
 
 export const Section = styled.section`
     margin: 2rem 0;
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: ${({ theme }) => theme.cardBackground};
+    border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     h3 {
-        margin-bottom: 1rem;
-        color: #333;
+        margin-bottom: 1.5rem;
+        color: ${({ theme }) => theme.textColor};
         font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    p {
+        margin: 0.5rem 0;
+        color: ${({ theme }) => theme.textColor};
+        
+        strong {
+            font-weight: 600;
+            color: ${({ theme }) => theme.textColor};
+        }
     }
 
     .media-grid {
@@ -83,7 +94,7 @@ export const Section = styled.section`
     }
 
     .media-item {
-        background: white;
+        background: ${({ theme }) => theme.cardBackground};
         border-radius: 8px;
         overflow: hidden;
         transition: transform 0.2s;
@@ -91,11 +102,12 @@ export const Section = styled.section`
 
         &:hover {
             transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         a {
             text-decoration: none;
-            color: inherit;
+            color: ${({ theme }) => theme.textColor};
             display: block;
             padding: 1rem;
         }
@@ -103,7 +115,7 @@ export const Section = styled.section`
         h4 {
             margin: 0 0 0.5rem 0;
             font-size: 1.1rem;
-            color: #333;
+            color: ${({ theme }) => theme.textColor};
         }
 
         .media-cover {
@@ -117,7 +129,36 @@ export const Section = styled.section`
         p {
             margin: 0.25rem 0;
             font-size: 0.9rem;
-            color: #666;
+            color: ${({ theme }) => theme.textColor};
+        }
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            margin: 0.5rem 0;
+            color: ${({ theme }) => theme.textColor};
+        }
+    }
+
+    .social-link {
+        color: ${({ theme }) => theme.primaryColor};
+        text-decoration: none;
+        
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .filmography-link {
+        color: ${({ theme }) => theme.primaryColor};
+        text-decoration: none;
+        
+        &:hover {
+            text-decoration: underline;
         }
     }
 `;

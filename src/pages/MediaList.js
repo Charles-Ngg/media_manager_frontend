@@ -3,34 +3,35 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getMediaList, playMedia, deleteMediaFiles, likeMedia, rateMedia } from '../services/api';
 import {
-    MediaListContainer,
-    MediaListHeader,
-    HeaderTitle,
-    AddMediaButton,
-    MediaGrid,
-    MediaCard,
-    MediaTitle,
-    MediaPoster,
-    MediaType,
-    MediaReleaseDate,
-    ViewDetailsButton,
-    SortContainer,
-    SortLabel,
-    SortSelect,
-    PlayButton,
-    DeleteButton,
-    FilterContainer,
-    FilterLabel,
-    FilterSelect,
-    NavigationBar,
-    NavLink,
-} from '../styles/MediaList.styles';
+    PageContainer,
+    Header,
+    Title,
+    AddButton,
+    ControlsContainer,
+    FilterSortContainer,
+    Label,
+    Select,
+    Grid,
+    Card,
+    CardImage,
+    CardImageLink,
+    CardContent,
+    CardTitle,
+    CardInfo,
+    CardActions,
+    ActionButton,
+    Loading,
+    ErrorMessage,
+} from '../styles/SharedComponents.styles';
 import LikeDislikeButtons from '../components/LikeDislikeButtons';
 import RatingStar from '../components/RatingStar';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { FaPlus, FaPlay, FaTrash } from 'react-icons/fa';
 
 function MediaList() {
     const [mediaList, setMediaList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [sortOrder, setSortOrder] = useLocalStorage('sortOrder', 'desc');
     const [sortBy, setSortBy] = useLocalStorage('sortBy', 'total_size');
     const [likeStateFilter, setLikeStateFilter] = useLocalStorage('likeStateFilter', 'all');
@@ -41,6 +42,7 @@ function MediaList() {
 
     const fetchMedia = async () => {
         try {
+            setLoading(true);
             const params = {
                 sort_order: sortOrder,
                 sort_by: sortBy,
@@ -56,8 +58,12 @@ function MediaList() {
                 rating: typeof media.rating === 'number' ? media.rating : 0,
             }));
             setMediaList(mediaData);
+            setError(null);
         } catch (error) {
             console.error('Error fetching media list:', error);
+            setError('Failed to fetch media list. Please try again later.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -106,7 +112,6 @@ function MediaList() {
 
         try {
             await likeMedia(mediaId, newLikeState);
-            // Update local state
             setMediaList(mediaList.map(media => 
                 media.id === mediaId ? { 
                     ...media, 
@@ -134,7 +139,6 @@ function MediaList() {
 
         try {
             await likeMedia(mediaId, newLikeStateValue);
-            // Update local state
             setMediaList(mediaList.map(media => 
                 media.id === mediaId ? { 
                     ...media, 
@@ -152,7 +156,6 @@ function MediaList() {
         if (typeof ratingValue !== 'number') return;
         try {
             await rateMedia(mediaId, ratingValue);
-            // Update local state (assuming average rating is updated)
             setMediaList(mediaList.map(media => 
                 media.id === mediaId ? { 
                     ...media, 
@@ -164,76 +167,87 @@ function MediaList() {
         }
     };
 
-    return (
-        <MediaListContainer>
-            <NavigationBar>
-                <NavLink to="/media" className="active">Media List</NavLink>
-                <NavLink to="/actors">Actor List</NavLink>
-            </NavigationBar>
+    if (loading) return <Loading>Loading media list...</Loading>;
+    if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
-            <MediaListHeader>
-                <HeaderTitle>Media List</HeaderTitle>
-                <AddMediaButton as={Link} to="/add-media">
-                    Add New Media
-                </AddMediaButton>
-            </MediaListHeader>
-            <FilterContainer>
-                <FilterLabel htmlFor="likeStateFilter">Filter by Like State:</FilterLabel>
-                <FilterSelect id="likeStateFilter" value={likeStateFilter} onChange={handleFilterChange}>
-                    <option value="all">All</option>
-                    <option value="liked">Liked</option>
-                    <option value="no_liked">No Liked</option>
-                    <option value="disliked">Disliked</option>
-                </FilterSelect>
-            </FilterContainer>
-            <SortContainer>
-                <SortLabel htmlFor="sortBy">Sort by:</SortLabel>
-                <SortSelect id="sortBy" value={sortBy} onChange={handleSortByChange}>
-                    <option value="total_size">Total Size</option>
-                    <option value="rating">Rating</option>
-                </SortSelect>
-                <SortLabel htmlFor="sortOrder">Order:</SortLabel>
-                <SortSelect id="sortOrder" value={sortOrder} onChange={handleSortOrderChange}>
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </SortSelect>
-            </SortContainer>
-            <MediaGrid>
+    return (
+        <PageContainer>
+            <Header>
+                <Title>Media List</Title>
+            </Header>
+            <ControlsContainer>
+                <FilterSortContainer>
+                    <Label htmlFor="likeStateFilter">Filter by Like State:</Label>
+                    <Select id="likeStateFilter" value={likeStateFilter} onChange={handleFilterChange}>
+                        <option value="all">All</option>
+                        <option value="liked">Liked</option>
+                        <option value="no_liked">Not Liked</option>
+                        <option value="disliked">Disliked</option>
+                    </Select>
+                </FilterSortContainer>
+
+                <FilterSortContainer>
+                    <Label htmlFor="sortBy">Sort by:</Label>
+                    <Select id="sortBy" value={sortBy} onChange={handleSortByChange}>
+                        <option value="total_size">Total Size</option>
+                        <option value="rating">Rating</option>
+                    </Select>
+                    <Label htmlFor="sortOrder">Order:</Label>
+                    <Select id="sortOrder" value={sortOrder} onChange={handleSortOrderChange}>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </Select>
+                </FilterSortContainer>
+            </ControlsContainer>
+
+            <Grid>
                 {mediaList.map((media) => (
-                    <MediaCard key={media.id}>
-                        <MediaTitle>{media.title}</MediaTitle>
-                        {media.poster_image_url && (
-                            <MediaPoster
-                                src={media.poster_image_url}
-                                alt={media.title}
-                            />
-                        )}
-                        <MediaType>Type: {media.type}</MediaType>
-                        <MediaReleaseDate>Release Date: {new Date(media.release_date).toLocaleDateString()}</MediaReleaseDate>
-                        <ViewDetailsButton as={Link} to={`/media/${media.id}`}>
-                            View Details
-                        </ViewDetailsButton>
-                        <PlayButton onClick={() => handlePlay(media.id)}>
-                            Play
-                        </PlayButton>
-                        <DeleteButton onClick={() => handleDelete(media.id)}>
-                            Delete
-                        </DeleteButton>
-                        <LikeDislikeButtons 
-                            likeState={media.like_state} 
-                            onLike={() => handleLike(media.id, media.like_state)} 
-                            onDislike={() => handleDislike(media.id, media.like_state)} 
-                            likesCount={media.likes}
-                            dislikesCount={media.dislikes}
-                        />
-                        <RatingStar 
-                            rating={media.rating} 
-                            onRate={(newRating) => handleRate(media.id, newRating)} 
-                        />
-                    </MediaCard>
+                    <Card key={media.id}>
+                        <CardContent>
+                            <CardTitle>{media.title}</CardTitle>
+                            {media.poster_image_url && (
+                                <CardImageLink to={`/media/${media.id}`}>
+                                    <CardImage
+                                        src={media.poster_image_url}
+                                        alt={media.title}
+                                    />
+                                </CardImageLink>
+                            )}
+                            <CardInfo>
+                                <div>Type: {media.type}</div>
+                                <div>Release Date: {new Date(media.release_date).toLocaleDateString()}</div>
+                                <div>
+                                    <LikeDislikeButtons 
+                                        likeState={media.like_state} 
+                                        onLike={() => handleLike(media.id, media.like_state)} 
+                                        onDislike={() => handleDislike(media.id, media.like_state)} 
+                                        likesCount={media.likes}
+                                        dislikesCount={media.dislikes}
+                                    />
+                                </div>
+                                <div>
+                                    <RatingStar 
+                                        rating={media.rating} 
+                                        onRate={(newRating) => handleRate(media.id, newRating)} 
+                                    />
+                                </div>
+                            </CardInfo>
+                            <CardActions>
+                                <ActionButton as={Link} to={`/media/${media.id}`} variant="primary">
+                                    View Details
+                                </ActionButton>
+                                <ActionButton onClick={() => handlePlay(media.id)}>
+                                    <FaPlay /> Play
+                                </ActionButton>
+                                <ActionButton onClick={() => handleDelete(media.id)} variant="danger">
+                                    <FaTrash /> Delete
+                                </ActionButton>
+                            </CardActions>
+                        </CardContent>
+                    </Card>
                 ))}
-            </MediaGrid>
-        </MediaListContainer>
+            </Grid>
+        </PageContainer>
     );
 }
 
