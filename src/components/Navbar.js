@@ -20,6 +20,9 @@ function Navbar({ toggleTheme, currentTheme }) {
                     <StyledLink to="/actors">Actor List</StyledLink>
                 </NavItem>
                 <NavItem>
+                    <StyledLink to="/websites">My Websites</StyledLink>
+                </NavItem>
+                <NavItem>
                     <ThemeToggle onClick={toggleTheme}>
                         {currentTheme === 'light' ? (
                             <>
