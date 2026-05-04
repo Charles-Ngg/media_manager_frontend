@@ -23,6 +23,7 @@ const websites = [
     { label: 'Koel', port: 8003, path: '/', note: 'Music server' },
     { label: 'qBittorrent', port: 8080, path: '/', note: 'Torrent WebUI' },
     { label: 'Jellyfin', port: 8096, path: '/web/', note: 'Media server' },
+    { label: 'Stock Daily Report', port: 8781, path: '/reports/daily', note: 'Stock opportunity daily report' },
     { label: 'Service UI (port 8191)', port: 8191, path: '/', note: 'Web endpoint' },
     { label: 'Service UI (port 8781)', port: 8781, path: '/', note: 'Web/API endpoint' },
     { label: 'Sonarr', port: 8989, path: '/', note: 'TV management' },
@@ -30,7 +31,17 @@ const websites = [
     { label: 'HK Parking Map', port: 18080, path: '/', note: 'Parking visualization' },
     { label: 'OpenClaw Control', port: 18789, path: '/', note: 'Agent control panel' },
     { label: 'HA Sensor Dashboard', port: 18888, path: '/', note: 'HA temp/humidity dashboard' },
-].map(item => ({ ...item, url: `http://${host}:${item.port}${item.path}` }));
+    { label: 'Desktop VNC', port: 6082, path: '/vnc_lite.html?scale=true&path=websockify', note: 'noVNC web client' },
+    {
+        label: 'Home Assistant',
+        port: 8123,
+        url: 'http://192.168.50.137:8123/lovelace/0',
+        note: 'HA Lovelace dashboard',
+    },
+].map(item => ({
+    ...item,
+    url: item.url || `http://${host}:${item.port}${item.path}`,
+}));
 
 const MyWebsites = () => {
     return (
