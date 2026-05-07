@@ -27,6 +27,14 @@ export const StyledLink = styled(Link)`
     }
 `;
 
+export const ExternalLink = styled.a`
+    font-size: 18px;
+    color: ${({ theme }) => theme.textColor};
+    &:hover {
+        color: ${({ theme }) => theme.linkColor};
+    }
+`;
+
 export const ThemeToggle = styled.button`
     background: none;
     border: none;
@@ -43,4 +51,4 @@ export const ThemeToggle = styled.button`
 
     display: flex;
     align-items: center;
-`; 
+`;

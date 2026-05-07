@@ -1,0 +1,150 @@
+:root {
+  --page: #f6f7f9;
+  --surface: #ffffff;
+  --text: #20242c;
+  --muted: #667085;
+  --line: #d9dee7;
+  --blue: #2563eb;
+  --green: #147d64;
+  --amber: #a16207;
+  --shadow: 0 8px 20px rgba(24, 31, 45, 0.07);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--page);
+  font-family: Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px clamp(16px, 5vw, 56px) 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+#host-line {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.primary-link,
+.site-card a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.primary-link:hover,
+.site-card a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 20px clamp(16px, 5vw, 56px) 36px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.filter {
+  min-width: 72px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter.active {
+  border-color: var(--blue);
+  color: #ffffff;
+  background: var(--blue);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.site-card {
+  min-height: 146px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.site-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 30px;
+}
+
+.site-card h2 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.port {
+  flex: 0 0 auto;
+  border-radius: 8px;
+  padding: 4px 8px;
+  color: var(--green);
+  background: #e7f5f0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.site-card p {
+  margin: 12px 0;
+  min-height: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.site-card a {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

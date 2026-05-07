@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的網頁</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>我的網頁</h1>
+      <p id="host-line"></p>
+    </div>
+    <a class="primary-link" id="frontend-link" href="#">Media App</a>
+  </header>
+
+  <main>
+    <section class="toolbar" aria-label="Website filters">
+      <button class="filter active" type="button" data-filter="all">全部</button>
+      <button class="filter" type="button" data-filter="media">媒體</button>
+      <button class="filter" type="button" data-filter="system">系統</button>
+      <button class="filter" type="button" data-filter="tools">工具</button>
+    </section>
+
+    <section class="grid" id="site-grid" aria-label="Website list"></section>
+  </main>
+
+  <script src="/sites.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

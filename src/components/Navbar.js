@@ -5,11 +5,14 @@ import {
     Nav,
     NavList,
     NavItem,
+    ExternalLink,
     StyledLink,
     ThemeToggle,
 } from '../styles/Navbar.styles';
 
 function Navbar({ toggleTheme, currentTheme }) {
+    const websitesUrl = `http://${window.location.hostname || '192.168.50.222'}/`;
+
     return (
         <Nav>
             <NavList>
@@ -20,7 +23,7 @@ function Navbar({ toggleTheme, currentTheme }) {
                     <StyledLink to="/actors">Actor List</StyledLink>
                 </NavItem>
                 <NavItem>
-                    <StyledLink to="/websites">My Websites</StyledLink>
+                    <ExternalLink href={websitesUrl}>My Websites</ExternalLink>
                 </NavItem>
                 <NavItem>
                     <ThemeToggle onClick={toggleTheme}>

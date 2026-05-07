@@ -6,7 +6,6 @@ import MediaDetail from './pages/MediaDetail';
 import AddMedia from './pages/AddMedia';
 import ActorList from './pages/ActorList';
 import ActorDetail from './pages/ActorDetail';
-import MyWebsites from './pages/MyWebsites';
 // Import other necessary components
 
 function AppRoutes() {
@@ -17,7 +16,6 @@ function AppRoutes() {
             <Route path="/add-media" element={<AddMedia />} />
             <Route path="/actors" element={<ActorList />} />
             <Route path="/actors/:id" element={<ActorDetail />} />
-            <Route path="/websites" element={<MyWebsites />} />
             {/* Add other routes as needed */}
         </Routes>
     );
